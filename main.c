@@ -12,6 +12,7 @@ int main() {
             *str_ptr = str,
             *start = &str[0],
             *end = &str[strlen(str)],
+            *sub,
             *joined,
             *repeated,
             *it,
@@ -24,6 +25,13 @@ int main() {
            utf8_distance(start, end),
            strlen(str)
     );
+
+    printf("advance from start: %s\n", utf8_advance(start, 2, end));
+    printf("advance from end: %s\n", utf8_advance(end, 3, start));
+
+    sub = utf8_substr(str, 1, 2);
+    printf("substr: %s\n", sub);
+    free(sub);
 
 
     vcat = utf8_vstrcat(2, "012", " 3456 789");

@@ -24,6 +24,8 @@ SOFTWARE.
 #include <string.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include "utf8c.h"
+
 
 char *utf8_next(const char *begin, const char *end) {
     unsigned char *octet_ptr = (unsigned char *) begin;
@@ -59,6 +61,24 @@ char *utf8_prior(const char *begin, const char *end) {
     return (char *) octet_ptr;
 }
 
+char *utf8_advance(const char *begin, size_t n, const char *end) {
+    size_t i;
+    char *(*iter_function)(const char *, const char *);
+
+    iter_function = (begin < end)
+                    ? utf8_next
+                    : utf8_prior;
+
+    for (i = 0; i < n; i++) {
+        begin = iter_function(begin, end);
+        if (begin == NULL) {
+            return NULL;
+        }
+    }
+    return (char *) begin;
+}
+
+
 char *utf8_repeat(const char *str, size_t n) {
     size_t len, i;
     char *new_str, *start;
@@ -85,17 +105,17 @@ char *utf8_repeat(const char *str, size_t n) {
 
 size_t utf8_distance(const char *begin, const char *end) {
     size_t dist;
+    char *(*iter_function)(const char *, const char *);
 
+    iter_function = (begin < end)
+                    ? utf8_next
+                    : utf8_prior;
     dist = 0;
-    if (begin < end) {
-        while ((begin = utf8_next(begin, end))) {
-            dist++;
-        }
-    } else {
-        while ((begin = utf8_prior(begin, end))) {
-            dist++;
-        }
+
+    while ((begin = iter_function(begin, end))) {
+        dist++;
     }
+
     return dist;
 }
 
@@ -159,6 +179,39 @@ char *utf8_strcpy(const char *str) {
     }
     return new_str;
 }
+
+char *utf8_substr(const char *str, size_t pos, size_t for_dist) {
+    size_t len, dist, new_len;
+    const char *start, *end, *it_start, *it_end;
+    char *new_str;
+
+    if (str == NULL) {
+        return NULL;
+    }
+
+    len = strlen(str);
+    start = &str[0];
+    end = &str[len];
+    dist = utf8_distance(start, end);
+
+    if (dist < pos + for_dist) {
+        return NULL;
+    }
+
+    it_start = utf8_advance(start, pos, end);
+    it_end = utf8_advance(it_start, for_dist, end);
+
+    new_len = it_end - it_start;
+    new_str = malloc(sizeof(char) * (new_len + 1));
+    if (new_str == NULL) {
+        return NULL;
+    }
+
+    memcpy(new_str, it_start, it_end - it_start);
+    new_str[new_len] = '\0';
+    return new_str;
+}
+
 
 char *utf8_join(const char *str, const char *joiner) {
     char *new_str, *new_start;
