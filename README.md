@@ -81,7 +81,7 @@ printf("%zu, %zu\n", utf8_distance(start1, end1), utf8_distance(start2, end2)); 
 printf("%zu", utf8_distance(end1, start1)); /* -> 4*/
 ```
 
-### char *utf8_reverse(char *str);
+### char *utf8_reverse(char str[]);
 Reverses string in place.<br/>
 Fallthrough: if `str` is NULL, returns NULL.
 ```c

@@ -59,7 +59,7 @@ size_t utf8_distance(const char *begin, const char *end);
  *     *str = "literal" read-only const declaration, use str[] = "literal" or DYNAMICALLY allocated string instead
  *     or your executable might crash,
  * return   - pointer to a first octet of reversed string*/
-char *utf8_reverse(char *str);
+char *utf8_reverse(char str[]);
 
 /* `str`    - pointer to a string, must be \0 terminated
  * return   - pointer to the beginning of DYNAMICALLY allocated copy of `str`. MUST BE FREED MANUALLY*/
