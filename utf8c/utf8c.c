@@ -180,7 +180,7 @@ char *utf8_strcpy(const char *str) {
     return new_str;
 }
 
-char *utf8_substr(const char *str, size_t pos, size_t for_dist) {
+char *utf8_substr(const char *str, size_t pos, size_t count) {
     size_t len, dist, new_len;
     const char *start, *end, *it_start, *it_end;
     char *new_str;
@@ -194,14 +194,22 @@ char *utf8_substr(const char *str, size_t pos, size_t for_dist) {
     end = &str[len];
     dist = utf8_distance(start, end);
 
-    if (dist < pos + for_dist) {
+    if (dist < pos) {
         return NULL;
     }
 
+
     it_start = utf8_advance(start, pos, end);
-    it_end = utf8_advance(it_start, for_dist, end);
+    it_end = (count == (size_t) -1)
+             ? end
+             : utf8_advance(it_start, count, end);
+
+    if (it_end == NULL) {
+        it_end = end;
+    }
 
     new_len = it_end - it_start;
+
     new_str = malloc(sizeof(char) * (new_len + 1));
     if (new_str == NULL) {
         return NULL;

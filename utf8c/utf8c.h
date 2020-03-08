@@ -66,11 +66,11 @@ char *utf8_reverse(char *str);
 char *utf8_strcpy(const char *str);
 
 /* `str`    - pointer to a string, must be \0 terminated
- * `pos`    - number of code points to advance starting from `str` beginning
- * `len`    - number of code points to take starting from `pos`
+ * `off`    - number of offset code points to advance starting from `str` beginning
+ * `count`  - number of code points to include starting from `off`
  * return   - pointer to the beginning of DYNAMICALLY allocated substring of `str`
  *     or NULL if allocation fails. MUST BE FREED MANUALLY*/
-char *utf8_substr(const char *str, size_t pos, size_t len);
+char *utf8_substr(const char *str, size_t off, size_t count);
 
 /* `str`    - pointer to a string, must be \0 terminated
  * `joiner` - pointer to a valid first octet of a string to be joined, must be \0 terminated`
