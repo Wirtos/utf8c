@@ -82,19 +82,27 @@ printf("%zu", utf8_distance(end1, start1)); /* -> 4*/
 ```
 
 ### char *utf8_reverse(char str[]);
-Reverses string in place.<br/>
+Reverses string in place. `str` **must** be mutable (read example below).<br/>
 Fallthrough: if `str` is NULL, returns NULL.
 ```c
 char str[] = "тест";
 utf8_reverse(str);
 puts(str); /* -> тсет*/
+
+
 /* !BUT! */
 char *str_read_only = "test";
+/* This code will crash(SEGFAULT) at runtime, char *str = "string" declaration is read-only, 
+* and function can't edit its elements in order to reverse it.
+* HOW TO THEN? - Use char str[] = "string" syntax for writeable strings,
+* or wrap string with utf8_strcpy before passing it.*/
+utf8_reverse(str_read_only); /* Invalid*/
+utf8_reverse("test"); /* Also invalid*/
 
- /* Will crash(SEGFAULT), char *str = "string" declaration is read-only, 
- * so function can't edit its elements. 
- * Use char str[] = "string" syntax for writeable strings*/
-utf8_reverse(str_read_only);
+char *res1 = utf8_reverse(utf8_strcpy(str_read_only)); /* Valid*/
+char *res2 = utf8_reverse(utf8_strcpy("test")); /* Also valid*/
+free(res1); /* must be freed, because utf8_strcpy allocates new memory*/
+free(res2);
 ```
 
 ### char *utf8_strcpy(const char *str);
