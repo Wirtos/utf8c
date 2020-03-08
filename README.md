@@ -3,7 +3,7 @@ Efficient, pure C90 compliant library to manipulate utf-8 encoded strings.
 
 ## Methods
 
-###char *utf8_next(const char *begin, const char *end);
+### char *utf8_next(const char *begin, const char *end);
 Given the iterator to the beginning of the UTF-8 sequence, it returns the pointer to the beginning of the next sequence.
 Returns NULL if it is the end.
 ```c
@@ -25,7 +25,7 @@ while ((it = utf8_next(it, end))) {
 str_ptr = start;  /* Reset str_ptr position to initial state*/
 ```
 
-###char *utf8_prior(const char *begin, const char *end);
+### char *utf8_prior(const char *begin, const char *end);
 Given a reference to an iterator pointing to an octet in a UTF-8 sequence, it decreases the iterator until it hits the beginning of the previous UTF-8 encoded code point and returns pointer to it. 
 Returns NULL if it is the end.
 ```c
@@ -42,7 +42,7 @@ while ((it = utf8_prior(it, start))) {
 }
 ```
 
-###char *utf8_advance(const char *begin, size_t n, const char *end);
+### char *utf8_advance(const char *begin, size_t n, const char *end);
 Advances an iterator by the specified number of code points within an UTF-8 sequence.
 Can be used backwards.
 ```c
@@ -54,7 +54,7 @@ printf("advance from start: %s\n", utf8_advance(start, 2, end)); /* -> "st_лд�
 printf("advance from end: %s\n", utf8_advance(end, 3, start));   /* -> "лдж"*/
 ```
 
-###char *utf8_repeat(const char *str, size_t n);
+### char *utf8_repeat(const char *str, size_t n);
 Returns allocated copy of str allocated for n times or empty string if n is 0.\
 Fallthrough: if `str` is NULL, returns NULL.\
 Must be freed manually with `free`.
@@ -64,7 +64,7 @@ puts(res);
 free(res); /* We don't need it anymore*/
 ```
 
-###size_t utf8_distance(const char *begin, const char *end);
+### size_t utf8_distance(const char *begin, const char *end);
 Given the iterators to two UTF-8 encoded code points in a sequence, returns the number of code points between them.
 Can be used backwards.
 ```c
@@ -81,7 +81,7 @@ printf("%zu, %zu\n", utf8_distance(start1, end1), utf8_distance(start2, end2)); 
 printf("%zu", utf8_distance(end1, start1)); /* -> 4*/
 ```
 
-###char *utf8_reverse(char *str);
+### char *utf8_reverse(char *str);
 Reverses string in place.\
 Fallthrough: if `str` is NULL, returns NULL.
 ```c
@@ -97,12 +97,12 @@ char *str_read_only = "test";
 utf8_reverse(str_read_only);
 ```
 
-###char *utf8_strcpy(const char *str);
+### char *utf8_strcpy(const char *str);
 Creates a dynamically allocated copy of `str`.\
 Fallthrough: if `str` is NULL, returns NULL.\
 Must be freed manually with `free`.
 
-###char *utf8_substr(const char *str, size_t off, size_t count);
+### char *utf8_substr(const char *str, size_t off, size_t count);
 Creates a dynamically allocated substring of string starting from `off`set number of code points 
 and includes `count` of code points after it (if the string is shorter, as many characters as possible are used).
 If `off`set is bigger than number of code points inside string it returns NULL.
@@ -120,7 +120,7 @@ free(sub2);
 
 ```
 
-###char *utf8_join(const char *str, const char *joiner);
+### char *utf8_join(const char *str, const char *joiner);
 Creates a dynamically allocated string joined with `joiner`.\
 Fallthrough: if `str` or `joiner` is NULL, returns NULL.\
 Must be freed manually with `free`.
@@ -130,7 +130,7 @@ puts(res); /* -> "т-е-с-т"*/
 free(res);
 ```
 
-###char *utf8_strcat(const char *a, const char *b);
+### char *utf8_strcat(const char *a, const char *b);
 Concatenates two strings together by creating new dynamically allocated string.\
 Fallthrough: if `a` or `b` is NULL, returns NULL.\
 Must be freed manually with `free`.
@@ -150,7 +150,7 @@ free(str1);
 free(str2);
 ```
 
-###char *utf8_mvstrcat(char *a, char *b);
+### char *utf8_mvstrcat(char *a, char *b);
 Concatenates two strings together by `m`o`v`ing them to the new string. Input strings **MUST** be dynamically allocated **only**,
 SEGFAULT otherwise. `a` and `b` are **no longer valid** and can't be used after passing them to the function,
 even if function fails.\
@@ -171,7 +171,7 @@ puts(str2); /* !!!SEGFAULT, str2 is no more valid!*/
 utf8_mvstrcat("test", "test"); /* !!!SEGFAULT, we can't move statically allocated strings!*/
 ```
 
-###char *utf8_vstrcat(size_t n_str, ...);
+### char *utf8_vstrcat(size_t n_str, ...);
 Variadically concatenates `n_str` together by creating new dynamically allocated string. Acts the same as `utf8_strcat`.\
 Fallthrough: if any string is NULL, returns NULL.\
 Must be freed manually with `free`.
@@ -190,7 +190,7 @@ free(str3);
 ```
 
 
-###char *utf8_vmvstrcat(size_t n_strings, ...);
+### char *utf8_vmvstrcat(size_t n_strings, ...);
 Variadically concatenates `n_strings` strings together by `m`o`v`ing them to the new string. Input strings **MUST** be dynamically allocated **only**,
 SEGFAULT otherwise.\
 Input strings are **no longer valid** and can't be used after passing them to the function, even if function fails.\
@@ -211,7 +211,7 @@ puts(str2); /* !!!SEGFAULT, str2 is no more valid!*/
 utf8_vmvstrcat(2, "test", "test"); /* !!!SEGFAULT, we can't move statically allocated strings!*/
 ```
 
-###char **utf8_to_arr(const char *str);
+### char **utf8_to_arr(const char *str);
 Creates new NULL-terminated array, where each utf-8 sequence of `str` is a separate string element.\
 Fallthrough: if `str` is NULL, returns NULL.\
 Must be freed manually with `utf8_arr_free`.
@@ -228,16 +228,16 @@ char **arr = utf8_to_arr("аabcㅊ"); /* ->
 utf8_arr_free(arr);
 ```
 
-###void utf8_arr_free(char **arr);
+### void utf8_arr_free(char **arr);
 Deallocates arr.\
 Fallthrough: if `arr` is NULL, returns NULL.
 
 
-###char *utf8_to_str(const char **arr);
+### char *utf8_to_str(const char **arr);
 Creates new allocated string created from `arr` elements.\
 Must be freed manually with `free`.
 
-#Code guidelines
+# Code guidelines
 Functions with allocations can return NULL if memory allocation fails, but checking each result will be a pain, right?\
 For example utf8_reverse returns the same input string pointer instead of allocating new one, but you can always do:
 ```c
