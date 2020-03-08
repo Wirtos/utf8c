@@ -226,7 +226,7 @@ char *utf8_join(const char *str, const char *joiner) {
     const char *start, *end, *it;
     size_t len, dist, joiner_len, n_octets;
 
-    if (str == NULL) {
+    if (str == NULL || joiner == NULL) {
         return NULL;
     }
 

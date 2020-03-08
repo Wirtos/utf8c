@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 #ifndef UTF8C_H
-#define UTF8C_H
+#define UTF8C_H 1.0f
 
 #include "stddef.h"
 
