@@ -55,8 +55,8 @@ printf("advance from end: %s\n", utf8_advance(end, 3, start));   /* -> "лдж"*
 ```
 
 ### char *utf8_repeat(const char *str, size_t n);
-Returns allocated copy of str allocated for n times or empty string if n is 0.\
-Fallthrough: if `str` is NULL, returns NULL.\
+Returns allocated copy of str allocated for n times or empty string if n is 0.<br/>
+Fallthrough: if `str` is NULL, returns NULL.<br/>
 Must be freed manually with `free`.
 ```c
 char *res = utf8_repeat("test", 3); /* -> "testtesttest"*/
@@ -82,7 +82,7 @@ printf("%zu", utf8_distance(end1, start1)); /* -> 4*/
 ```
 
 ### char *utf8_reverse(char *str);
-Reverses string in place.\
+Reverses string in place.<br/>
 Fallthrough: if `str` is NULL, returns NULL.
 ```c
 char str[] = "тест";
@@ -98,16 +98,16 @@ utf8_reverse(str_read_only);
 ```
 
 ### char *utf8_strcpy(const char *str);
-Creates a dynamically allocated copy of `str`.\
-Fallthrough: if `str` is NULL, returns NULL.\
+Creates a dynamically allocated copy of `str`.<br/>
+Fallthrough: if `str` is NULL, returns NULL.<br/>
 Must be freed manually with `free`.
 
 ### char *utf8_substr(const char *str, size_t off, size_t count);
 Creates a dynamically allocated substring of string starting from `off`set number of code points 
 and includes `count` of code points after it (if the string is shorter, as many characters as possible are used).
 If `off`set is bigger than number of code points inside string it returns NULL.
-If you want to include all the remaining string starting from `off`set, then pass `-1` as `count`.\
-Fallthrough: if `str` is NULL, returns NULL.\
+If you want to include all the remaining string starting from `off`set, then pass `-1` as `count`.<br/>
+Fallthrough: if `str` is NULL, returns NULL.<br/>
 Must be freed manually with `free`.
 ```c
 char *str = "тест";
@@ -121,8 +121,8 @@ free(sub2);
 ```
 
 ### char *utf8_join(const char *str, const char *joiner);
-Creates a dynamically allocated string joined with `joiner`.\
-Fallthrough: if `str` or `joiner` is NULL, returns NULL.\
+Creates a dynamically allocated string joined with `joiner`.<br/>
+Fallthrough: if `str` or `joiner` is NULL, returns NULL.<br/>
 Must be freed manually with `free`.
 ```c
 char *res = utf8_join("тест", "-");
@@ -131,8 +131,8 @@ free(res);
 ```
 
 ### char *utf8_strcat(const char *a, const char *b);
-Concatenates two strings together by creating new dynamically allocated string.\
-Fallthrough: if `a` or `b` is NULL, returns NULL.\
+Concatenates two strings together by creating new dynamically allocated string.<br/>
+Fallthrough: if `a` or `b` is NULL, returns NULL.<br/>
 Must be freed manually with `free`.
 ```c
 char *res = utf8_strcat("test", "тест");
@@ -153,8 +153,8 @@ free(str2);
 ### char *utf8_mvstrcat(char *a, char *b);
 Concatenates two strings together by `m`o`v`ing them to the new string. Input strings **MUST** be dynamically allocated **only**,
 SEGFAULT otherwise. `a` and `b` are **no longer valid** and can't be used after passing them to the function,
-even if function fails.\
-Fallthrough: if `a` or `b` is NULL, returns NULL.\
+even if function fails.<br/>
+Fallthrough: if `a` or `b` is NULL, returns NULL.<br/>
 Must be freed manually with `free`.
 ```c
 char *str1 = utf8_strcpy("тест"), *str2 = utf8_join("test", "-"); /* Dynamically allocate two strings*/
@@ -172,8 +172,8 @@ utf8_mvstrcat("test", "test"); /* !!!SEGFAULT, we can't move statically allocate
 ```
 
 ### char *utf8_vstrcat(size_t n_str, ...);
-Variadically concatenates `n_str` together by creating new dynamically allocated string. Acts the same as `utf8_strcat`.\
-Fallthrough: if any string is NULL, returns NULL.\
+Variadically concatenates `n_str` together by creating new dynamically allocated string. Acts the same as `utf8_strcat`.<br/>
+Fallthrough: if any string is NULL, returns NULL.<br/>
 Must be freed manually with `free`.
 ```c
 char *res = utf8_vstrcat(3, "test", " concat ", "тест");
@@ -192,9 +192,9 @@ free(str3);
 
 ### char *utf8_vmvstrcat(size_t n_strings, ...);
 Variadically concatenates `n_strings` strings together by `m`o`v`ing them to the new string. Input strings **MUST** be dynamically allocated **only**,
-SEGFAULT otherwise.\
-Input strings are **no longer valid** and can't be used after passing them to the function, even if function fails.\
-Fallthrough: if any string is NULL, returns NULL.\
+SEGFAULT otherwise.<br/>
+Input strings are **no longer valid** and can't be used after passing them to the function, even if function fails.<br/>
+Fallthrough: if any string is NULL, returns NULL.<br/>
 Must be freed manually with `free`.
 ```c
 char *str1 = utf8_strcpy("тест"), *str2 = utf8_join("test", "-"), *str3 = utf8_strcat(" con", "cat"); /* Dynamically allocate two strings*/
@@ -212,8 +212,8 @@ utf8_vmvstrcat(2, "test", "test"); /* !!!SEGFAULT, we can't move statically allo
 ```
 
 ### char **utf8_to_arr(const char *str);
-Creates new NULL-terminated array, where each utf-8 sequence of `str` is a separate string element.\
-Fallthrough: if `str` is NULL, returns NULL.\
+Creates new NULL-terminated array, where each utf-8 sequence of `str` is a separate string element.<br/>
+Fallthrough: if `str` is NULL, returns NULL.<br/>
 Must be freed manually with `utf8_arr_free`.
 ```c
 char **arr = utf8_to_arr("аabcㅊ"); /* ->
@@ -229,16 +229,16 @@ utf8_arr_free(arr);
 ```
 
 ### void utf8_arr_free(char **arr);
-Deallocates arr.\
+Deallocates arr.<br/>
 Fallthrough: if `arr` is NULL, returns NULL.
 
 
 ### char *utf8_to_str(const char **arr);
-Creates new allocated string created from `arr` elements.\
+Creates new allocated string created from `arr` elements.<br/>
 Must be freed manually with `free`.
 
 # Code guidelines
-Functions with allocations can return NULL if memory allocation fails, but checking each result will be a pain, right?\
+Functions with allocations can return NULL if memory allocation fails, but checking each result will be a pain, right?<br/>
 For example utf8_reverse returns the same input string pointer instead of allocating new one, but you can always do:
 ```c
 char str[] = "string";
