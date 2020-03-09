@@ -129,4 +129,4 @@ void utf8_arr_free(char **arr);
  *     or NULL if allocation fails. MUST BE FREED MANUALLY*/
 char *utf8_to_str(const char **arr);
 
-#endif // UTF8C_H
+#endif /* UTF8C_H*/
