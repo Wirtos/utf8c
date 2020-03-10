@@ -28,37 +28,34 @@ SOFTWARE.
 
 
 char *utf8_next(const char *begin, const char *end) {
-    unsigned char *octet_ptr = (unsigned char *) begin;
-
     if (begin == end) {
         return NULL;
     }
 
-    if ((*octet_ptr & 0x80u) == 0x0u) {
-        octet_ptr += 1;
-    } else if ((*octet_ptr & 0xE0u) == 0xC0u) {
-        octet_ptr += 2;
-    } else if ((*octet_ptr & 0xF0u) == 0xE0u) {
-        octet_ptr += 3;
-    } else if ((*octet_ptr & 0xF8u) == 0xF0u) {
-        octet_ptr += 4;
+    if ((*begin & 0x80) == 0x0) {
+        begin += 1;
+    } else if ((*begin & 0xE0) == 0xC0) {
+        begin += 2;
+    } else if ((*begin & 0xF0) == 0xE0) {
+        begin += 3;
+    } else if ((*begin & 0xF8) == 0xF0) {
+        begin += 4;
     }
 
-    return (char *) octet_ptr;
+    return (char *) begin;
 }
 
 char *utf8_prior(const char *begin, const char *end) {
-    unsigned char *octet_ptr = (unsigned char *) begin;
 
     if (begin == end) {
         return NULL;
     }
 
     do {
-        octet_ptr--;
-    } while ((*octet_ptr & 0xC0u) == 0x80u);
+        begin--;
+    } while ((*begin & 0xC0) == 0x80);
 
-    return (char *) octet_ptr;
+    return (char *) begin;
 }
 
 char *utf8_advance(const char *begin, size_t n, const char *end) {

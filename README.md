@@ -2,10 +2,14 @@
 Efficient, pure C90 compliant library to manipulate utf-8 encoded strings.
 
 ## Methods
+##!
+#####If function allocates something it returns NULL if there's not enough memory.
+#####If NULL is passed to `fallthrough` function, then function does nothing (if not stated otherwise, e.g. `move` functions) and returns NULL.
 
 ### char *utf8_next(const char *begin, const char *end);
-Given the iterator to the beginning of the UTF-8 sequence, it returns the pointer to the beginning of the next sequence.
-Returns NULL if it is the end.
+Given the iterator to the beginning of the UTF-8 sequence, 
+it returns the pointer to the beginning of the next sequence.<br/>
+Returns NULL if `begin` is the `end`.
 ```c
 char *str_ptr = "test_лдж", *it, *end, *start;
 
@@ -26,8 +30,10 @@ str_ptr = start;  /* Reset str_ptr position to initial state*/
 ```
 
 ### char *utf8_prior(const char *begin, const char *end);
-Given a reference to an iterator pointing to an octet in a UTF-8 sequence, it decreases the iterator until it hits the beginning of the previous UTF-8 encoded code point and returns pointer to it. 
-Returns NULL if it is the end.
+Given a reference to an iterator pointing to an octet in a UTF-8 sequence, 
+it decreases the iterator until it hits the beginning of the previous UTF-8 encoded code point 
+and returns pointer to it. <br/> 
+Returns NULL if `begin` is the `end`.
 ```c
 char *it;
 it = end;
@@ -44,7 +50,8 @@ while ((it = utf8_prior(it, start))) {
 
 ### char *utf8_advance(const char *begin, size_t n, const char *end);
 Advances an iterator by the specified number of code points within an UTF-8 sequence.
-Can be used backwards.
+Can be used backwards. <br/>
+Returns NULL if number of code points is too big.
 ```c
 char *str_ptr = "test_лдж", *it, *end, *start;
 start = &str_ptr[0];
@@ -55,7 +62,7 @@ printf("advance from end: %s\n", utf8_advance(end, 3, start));   /* -> "лдж"*
 ```
 
 ### char *utf8_repeat(const char *str, size_t n);
-Returns allocated copy of str allocated for n times or empty string if n is 0.<br/>
+Returns dynamically allocated copy of str repeated for n times or empty string if n is 0.<br/>
 Fallthrough: if `str` is NULL, returns NULL.<br/>
 Must be freed manually with `free`.
 ```c
