@@ -2,9 +2,9 @@
 Efficient, pure C90 compliant library to manipulate utf-8 encoded strings.
 
 ## Methods
-##!
-#####If function allocates something it returns NULL if there's not enough memory.
-#####If NULL is passed to `fallthrough` function, then function does nothing (if not stated otherwise, e.g. `move` functions) and returns NULL.
+## !
+##### If function allocates something it returns NULL if there's not enough memory to do that.
+##### If NULL is passed to `fallthrough` function, then function does nothing (if not stated otherwise, e.g. `move` functions) and returns NULL.
 
 ### char *utf8_next(const char *begin, const char *end);
 Given the iterator to the beginning of the UTF-8 sequence, 
