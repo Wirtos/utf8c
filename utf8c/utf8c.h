@@ -22,9 +22,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 #ifndef UTF8C_H
-#define UTF8C_H 1.0f
+#define UTF8C_H 1.4f
 
 #include "stddef.h"
+
+/* Errno codes*/
+#define UTF8_OK     0  /* Status OK, no errors */
+#define UTF8_ENOMEM 12 /* Out of memory */
+#define UTF8_EINVAL 22 /* Invalid argument */
+#define UTF8_ERANGE 34 /* Out of range offset */
+
+extern const size_t utf8_npos; /* Max possible value of len and count */
 
 /* `begin`  - pointer to a string
  * `end`    - pointer to a string which we will not go beyond. Can also be a pointer to \0
@@ -127,6 +135,6 @@ void utf8_arr_free(char **arr);
 /* `arr`    - pointer to a valid array allocated with utf8_to_array.
  * return   - pointer to the beginning of DYNAMICALLY allocated string created from `arr`
  *     or NULL if allocation fails. MUST BE FREED MANUALLY*/
-char *utf8_to_str(const char **arr);
+char *utf8_to_str(char *const *arr);
 
 #endif /* UTF8C_H*/

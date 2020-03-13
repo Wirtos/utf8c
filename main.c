@@ -2,36 +2,42 @@
 #include <string.h>
 #include <utf8c.h>
 #include <stdlib.h>
+#include <errno.h>
 
 /* Read about definitions first https://stackoverflow.com/a/27331885/9997709*/
 int main() {
 
     /* strlen - amount of octets NOT "characters"*/
     char
-            str[] = "лаба",
+            str[] = "лабс",
             *str_ptr = str,
-            *start = &str[0],
+            *begin = &str[0],
             *end = &str[strlen(str)],
             *sub,
+            *sub_all,
             *joined,
             *repeated,
             *it,
             *vcat,
             *vmvcat,
             **arr,
-            **arr_start;
+            **arr_begin;
 
     printf("number of 'characters': %zu, octets: %zu\n",
-           utf8_distance(start, end),
+           utf8_distance(begin, end),
            strlen(str)
     );
 
-    printf("advance from start: %s\n", utf8_advance(start, 2, end));
-    printf("advance from end: %s\n", utf8_advance(end, 3, start));
+    printf("advance from start: %s\n", utf8_advance(begin, 2, end));
+    printf("advance from end: %s\n", utf8_advance(end, 3, begin));
 
     sub = utf8_substr(str, 1, 2);
     printf("substr: %s\n", sub);
     free(sub);
+
+    sub_all = utf8_substr(str, 0, utf8_npos);
+    printf("substr until end: %s\n", sub_all);
+    free(sub_all);
 
 
     vcat = utf8_vstrcat(2, "012", " 3456 789");
@@ -58,11 +64,11 @@ int main() {
     putchar('\n');
 
     arr = utf8_to_arr(str);
-    arr_start = arr;
+    arr_begin = arr;
     while (*arr != NULL) {
         puts(*arr++);
     }
-    utf8_arr_free(arr_start);
+    utf8_arr_free(arr_begin);
     putchar('\n');
 
 
@@ -83,7 +89,7 @@ int main() {
     it = str_ptr; /* `str` is currently pointing to the end of our string - '\0'*/
 
     /* `it` will be NULL at the end of the operation*/
-    while ((it = utf8_prior(it, start))) {
+    while ((it = utf8_prior(it, begin))) {
         /* Print octets starting from the beginning of prior "character"
          * until we hit first octet pointer of next "character". Same way as utf8_next, but backwards.*/
         for (char *octet = it; octet != str_ptr; octet++) {
@@ -92,5 +98,7 @@ int main() {
         putchar('\n');
         str_ptr = it; /* Set `str` to be previous result of utf8_prior*/
     }
-    return EXIT_SUCCESS;
+    return (errno == UTF8_OK)
+           ? EXIT_SUCCESS
+           : EXIT_FAILURE;
 }
